@@ -31,7 +31,7 @@ class OddballParticle extends Particle {
     myX = 300 + shakeAmount * (float)Math.sin(shakeSpeed * millis());
     myY = 250 + shakeAmount * (float)Math.cos(shakeSpeed * millis());
     fill(myColor);
-    ellipse((int) myX + 70, (int) myY + 50, 50, 30);
+    ellipse((int) myX + 75, (int) myY + 55, 55, 35);
   }
 }
 Particle[] bob = new Particle[1000];
