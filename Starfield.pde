@@ -2,56 +2,56 @@ class Particle {
   double myX, myY, myAngle, mySpeed;
   int myColor;
 
-  // Constructor for Particle
   Particle() {
     myX = 340;
     myY = 240;
     myAngle = Math.random() * 2 * Math.PI;
     mySpeed = Math.random() * 10;
     myColor = color((int)(Math.random() * 256), (int)(Math.random() * 256), (int)(Math.random() * 256));
-  }
+  } // end of Particle constructor
 
-  // Show the particle (draw it)
   void show() {
     fill(myColor);
-    ellipse((int) myX + 70, (int) myY + 50, 5, 5); // Draw small particles
-  }
+    ellipse((int) myX + 70, (int) myY + 50, 5, 5);
+  } // end of show
 
-  // Move the particle based on its speed and angle
   void move() {
     myX = myX + Math.cos(myAngle) * mySpeed;
     myY = myY + Math.sin(myAngle) * mySpeed;
-  }
-}
+  } // end of move
+} // end of Particle class
 
-// OddballParticle class that extends Particle
-class OddballParticle extends Particle {
-  float shakeAmount = 5.0; // How much the oddball shakes
-  float shakeSpeed = 0.05; // Speed of shaking
+// Extend Particle class to create an OddParticle
+class OddParticle extends Particle {
 
-  // Constructor for OddballParticle
-  OddballParticle() {
-    super(); // Call the parent constructor (Particle)
-    myColor = color(255, 0, 0);  // Give OddballParticle a fixed red color
-    mySpeed = Math.random() * 5;  // Oddball particles have slower speed
-  }
-
-  // Override the show method to make the oddball particle look like a giant ellipse
-  @Override
-  void show() {
-    // Make the oddball particle shake in the center of the screen
-    myX = 300 + shakeAmount * (float)Math.sin(shakeSpeed * millis());  // Shake in the X direction
-    myY = 250 + shakeAmount * (float)Math.cos(shakeSpeed * millis());  // Shake in the Y direction
-    
-    fill(myColor);
-    // Draw a giant ellipse, making it much larger than normal particles
-    ellipse((int) myX + 70, (int) myY + 50, 50, 30); // Larger ellipse (50x30 pixels)
+  OddParticle() {
+    myX = 300;
+    myY = 230;
+    myAngle =  Math.random() * 1 * Math.PI;
+     mySpeed = Math.random() * 13;
+    myColor = color((int)(Math.random() * 256), (int)(Math.random() * 256), (int)(Math.random() * 256));
+    super(); // call the parent constructor
   }
 
-  // Override move method (optional for shake, but we could leave it as-is for the sake of movement)
-  @Override
+
   void move() {
-    // Oddball doesn't need to move randomly, we control it via shaking instead.
+    super.move(); // inherit the basic movement behavior
+
+    // Add a unique behavior: bounce off the screen edges
+    if (myX < 0 || myX > width) {
+      myAngle = Math.PI - myAngle; // reverse the x-direction
+    }
+    if (myY < 0 || myY > height) {
+      myAngle = -myAngle; // reverse the y-direction
+    }
+  }
+
+  
+  void show() {
+    // Make the OddParticle appear larger and change color frequently
+    myColor = color((int)(Math.random() * 256), (int)(Math.random() * 256), (int)(Math.random() * 256));
+    fill(myColor);
+    ellipse((int) myX + 70, (int) myY + 50, 10, 10); // larger ellipse
   }
 }
 
@@ -59,23 +59,20 @@ Particle[] bob = new Particle[1000];
 
 void setup() {
   size(600, 600);
-  
-  // Create an array of particles
-  for (int i = 0; i < bob.length; i++) {
-    if (i == 0) {
-      bob[i] = new OddballParticle(); // First element is an OddballParticle
-    } else {
-      bob[i] = new Particle(); // The rest are normal Particles
-    }
+  // Initialize first two elements with OddParticle instances
+  for (int i = 0; i < 2; i++) {
+    bob[i] = new OddParticle();
+  }
+  // Initialize remaining elements with Particle instances
+  for (int i = 2; i < bob.length; i++) {
+    bob[i] = new Particle();
   }
 }
 
 void draw() {
-  background(0, 0, 0); // Black background
-  
-  // Loop through all particles and move/show them
+  background(0, 0, 0);
   for (int i = 0; i < bob.length; i++) {
-    bob[i].move();  // Move the particle
-    bob[i].show();  // Show the particle
+    bob[i].show();
+    bob[i].move();
   }
 }
